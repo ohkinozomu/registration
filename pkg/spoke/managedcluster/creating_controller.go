@@ -3,7 +3,6 @@ package managedcluster
 import (
 	"context"
 	"fmt"
-	"strings"
 	"time"
 
 	clientset "open-cluster-management.io/api/client/cluster/clientset/versioned"
@@ -54,7 +53,7 @@ func NewManagedClusterCreatingController(
 
 func (c *managedClusterCreatingController) sync(ctx context.Context, syncCtx factory.SyncContext) error {
 	existingCluster, err := c.hubClusterClient.ClusterV1().ManagedClusters().Get(ctx, c.clusterName, metav1.GetOptions{})
-	if err != nil && skipUnauthorizedError(err) == nil && strings.Contains(err.Error(), anonymous) {
+	if err != nil && skipUnauthorizedError(err) == nil {
 		klog.V(4).Infof("unable to get the managed cluster %q from hub: %v", c.clusterName, err)
 		return nil
 	}
